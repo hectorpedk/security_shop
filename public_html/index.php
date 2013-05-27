@@ -1,24 +1,33 @@
 <?php
-    use Resources\Library;
+    use Resources\Library as Lib;
+    use Resources\Classes as Cls;
 
 	require_once(realpath(dirname(__FILE__) . "/../resources/config.php"));
 	require_once(LIBRARY_PATH . "/templateFunctions.php");
+    require_once(CLASSES_PATH . "/database.class.php");
 
-	/*
-		Now you can handle all your php logic outside of the template
-		file which makes for very clean code!
-	*/
+    $test = new Cls\Database();
+
+$database = $test->connect();
+$database = $test->tableExists('dimul');
+var_dump($database);
+
+
+/*
+    Now you can handle all your php logic outside of the template
+    file which makes for very clean code!
+*/
 	
-	$setInIndexDotPhp = "I am set in the index.php file.";
-
-    $test = "This is in index.php that is included in different place";
+//	$setInIndexDotPhp = "I am set in the index.php file.";
+//
+//    $test = "This is in index.php that is included in different place";
 	
 	// Must pass in variables (as an array) to use in template
-	$variables = array(
-		'setInIndexDotPhp' => $setInIndexDotPhp,
-        'test'             => $test
-	);
+//	$variables = array(
+//		'setInIndexDotPhp' => $setInIndexDotPhp,
+//        'test'             => $test
+//	);
 	
-	Library\renderLayoutWithContentFile("home.php", $variables);
+	Lib\renderLayoutWithContentFile("home.php");
 
 ?>
