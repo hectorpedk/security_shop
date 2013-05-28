@@ -29,7 +29,16 @@ class Database
      * @var PDO pdo Holds PDO object after successful connection to the database;
      */
     private $pdo;              // Checks to see if the connection is active
-    private $result = array(); // Results that are returned from the query
+    private $result = array();
+
+	function __construct ( $db_host , $db_name , $db_pass , $db_user )
+	{
+		$this->db_host = $db_host;
+		$this->db_name = $db_name;
+		$this->db_pass = $db_pass;
+		$this->db_user = $db_user;
+	} // Results that are returned from the query
+
 
     /*
      * Connects to the database
@@ -86,7 +95,7 @@ class Database
     private function tableExists ( $table )
     {
         try{
-
+			/** @var PDOStatement $stmt Holds a prepared statement for PDO object to handle */
             $stmt = $this->pdo->prepare( 'SHOW TABLES FROM ' . $this->db_name . ' LIKE "' . $table . '"' );
             $stmt->execute();
             $stmt->setFetchMode( PDO::FETCH_ASSOC );
@@ -119,16 +128,16 @@ class Database
      */
     public function select( $table , $columns = '*' , $where = null , $order = null )
     {
-        $sql = 'SELECT ' . $columns . ' FROM ' . $table;
+        $select = 'SELECT ' . $columns . ' FROM ' . $table;
 
         if( $where != null )
-            $sql .= ' WHERE ' . $where;
+            $select .= ' WHERE ' . $where;
         if( $order != null )
-            $sql .= ' ORDER BY ' . $order;
+            $select .= ' ORDER BY ' . $order;
 
         try {
             /** @var PDOStatement $stmt Holds a prepared statement for PDO object to handle */
-            $stmt = $this->pdo->prepare( $sql );
+            $stmt = $this->pdo->prepare( $select );
             $stmt->execute();
 
             # Iteration through all rows that were return from the table
@@ -185,9 +194,9 @@ class Database
      *           values     (the values to be inserted)
      * Optional: columns    (if values don't match the number of rows)
      *
-     * @param string    $table      Table name to insert into
-     * @param array     $values     Array of values to insert into table
-     * @param array     $columns    Array of columns into which to insert values
+     * @param string    $table      Table name to insert into						| required parameter
+     * @param array     $values     Array of values to insert into table			| required patameter
+     * @param array     $columns    Array of columns into which to insert values	| default null
      *
      * @return bool|PDOException
      */
@@ -221,8 +230,8 @@ class Database
 
             }
 
-            $values = implode( ',' , $values );
-            $insert .= ' VALUES (' . $values . ')';
+            $valuesString = implode( ',' , $values );
+            $insert .= ' VALUES (' . $valuesString . ')';
 
             try {
                 /** @var PDOStatement $stmt Holds a prepared statement for PDO object to handle */
@@ -237,101 +246,179 @@ class Database
         }
     }
 
-    /*
-    * Deletes table or records where condition is true
-    * Required: table (the name of the table)
-    * Optional: where (condition [column =  value])
-    */
-    // TODO: Finish delete, update with PDO class
-    public function delete($table,$where = null)
+	/**
+	 * Deletes table or records where condition is true
+	 * Required: table ( the name of the table to delete )
+	 * Optional: where ( condition [column name = value] )
+	 *
+	 * @param string	$table	"Table name from which to delete" - or if $where is not provided - "table to delete" | required parameter
+	 * @param array		$where	Associative array of conditions array_key ( column name to match ) => array_key_value( value to match )
+	 *
+	 * @return bool
+	 */
+	// TODO: Finish update with PDO class
+	public function del( $table , $where = null )
     {
-        if($this->tableExists($table))
-        {
-            if($where == null)
-            {
-                $delete = 'DELETE '.$table;
-            }
-            else
-            {
-                $delete = 'DELETE FROM '.$table.' WHERE '.$where;
-            }
-            $del = @mysql_query($delete);
+        if ( $this->tableExists( $table ) ) {
 
-            if($del)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
+			$delete = 'DELETE FROM ' . $table;
+
+			if ( $where != null ) {
+
+				$conditions = array();
+				$keys = array_keys( $where );
+				for ( $i = 0 ; $i < count( $keys ) ; $i++ ) {
+
+					$checkString = is_string( $where[ $keys[$i] ] ) ? '\'' . $where[ $keys[$i] ] . '\'' : $where[ $keys[$i] ];
+					$conditions[$i] = $keys[$i] . ' = ' . $checkString;
+
+				}
+				$conditionsString = implode( ' AND ' , $conditions );
+				$delete .= ' WHERE ' . $conditionsString;
+
+			 }
+
+			try {
+
+				/** @var PDOStatement $stmt Holds a prepared statement for PDO object to handle */
+				$stmt = $this->pdo->prepare( $delete );
+				$stmt->execute();
+				return true;
+
+			} catch (\PDOException $e) {
+				echo 'Something is wrong in remove(): ' . $e->getMessage();
+				return false;
+			};
+
+		} else {
             return false;
         }
     }
 
-    /*
-     * Updates the database with the values sent
-     * Required: table (the name of the table to be updated
-     *           rows (the rows/values in a key/value array
-     *           where (the row/condition in an array (row,condition) )
-     */
-    public function update($table,$rows,$where)
-    {
-        if($this->tableExists($table)) {
-            // Parse the where values
-            // even values (including 0) contain the where rows
-            // odd values contain the clauses for the row
-            for($i = 0; $i < count($where); $i++) {
-                if($i%2 != 0)
-                {
-                    if(is_string($where[$i]))
-                    {
-                        if(($i+1) != null)
-                            $where[$i] = '"'.$where[$i].'" AND ';
-                        else
-                            $where[$i] = '"'.$where[$i].'"';
-                    }
-                }
-            }
-            $where = implode('',$where);
+	/**
+	 * Updates the database with the values provided
+	 *
+	 * Required: table		( the name of the table to be updated )
+	 *           columns	( the column/value in a key/value array )
+	 *           where		( the column/condition in an array ( column , condition ) )
+	 *
+	 * @param string	$table		Table name in which values have to be updated
+	 * @param array		$columns	Associative array of $key => $value pairs,
+	 *								where $key is column_name and $value is column_value to update;
+	 * @param array		$where		Associative array of $key => $value pairs,
+	 * 								where $key is column_name and $value is column_value to match condition;
+	 *
+	 * @return bool|PDOException	Function returns true if everything was successful,
+	 *								Returns false if something was wrong during PDOstatement execution, throws PDOException,
+	 *								Returns false if provided $table is not present in the database;
+	 */
+
+	public function update ( $table , array $columns , array $where )
+	{
+		if ( $this->tableExists( $table ) ) {
+
+			/** @var string $update SQL update string for database execution */
+			$update = 'UPDATE ' . $table . ' SET ';
+
+			/**
+			 *	Below starts a Codeblock for handling $columns array;
+			 *	Code creates SET parameters (column_name = column_value) and appends to SQL $update string;
+			 *
+			 * @var array $columnsToSet	Indexed array of SET parameters for SQL update statement
+			 * 							like 'column_name = column_value';
+			 */
+				$columnsToSet = array ();
+
+				/** @var array $keys Indexed array of column names to update */
+				$keys   = array_keys( $columns );
+
+				/* Iterate through all columns provided with function call */
+				for ( $i = 0 ; $i < count( $keys ) ; $i++ ) {
+
+					/**
+					 * $checkSetString is if statement shorthand with ternary operator
+					 * Checks values of the keys in $columns array
+					 * In other words, check if column_value is a string - needed for correct SQL syntax
+					 *
+					 * @var string $checkSetString String of one SET parameter
+					 */
+					$checkSetString = (is_string( $columns[ $keys[$i] ] ) ? '\'' . $columns[ $keys[$i] ] . '\'' : $columns[ $keys[$i] ]);
+
+					/* Populate array $columnsToSet with SET parameter */
+					$columnsToSet[$i] = $keys[$i] . ' = ' . $checkSetString;
+
+				}
+
+				/**
+				 * $setString is if shorthand that checks for amount of SET parameters,
+				 * if there is more than one then they will be separated by comma ",",
+				 * if there is other condition then no separation will be added
+				 *
+				 * @var string $setString  String of ALL SET parameters
+				 */
+				$setString = ( count( $columns ) > 1 ?
+					implode( ' , ' , $columnsToSet ) : implode( "" , $columnsToSet ) );
+
+				/* Append ALL SET parameter to SQL $update string */
+				$update .= $setString;
+
+			/* End of Codeblock for handling $columns array */
+
+			/**
+			 * Below starts a Codeblock for handling $where array;
+			 * Code creates WHERE clause (condition_name = condition_value) and appends to SQL $update string;
+			 *
+			 * @var array $whereConditions	Indexed array of WHERE conditions for SQL update statement
+			 * 								like 'condition_name = condition_value';
+			 */
+				$whereConditions = array();
+
+				/** @var array $keys Indexed array of condition_names */
+				$keys = array_keys( $where );
+				/* Iterate through all condition provided with function call */
+				for ( $i = 0 ; $i < count( $keys ) ; $i++ ) {
 
 
-            $update = 'UPDATE '.$table.' SET ';
-            $keys = array_keys($rows);
-            for($i = 0; $i < count($rows); $i++) {
-                if(is_string($rows[$keys[$i]]))
-                {
-                    $update .= $keys[$i].'="'.$rows[$keys[$i]].'"';
-                }
-                else
-                {
-                    $update .= $keys[$i].'='.$rows[$keys[$i]];
-                }
+					/**
+					 * $checkWhereString is if statement shorthand with ternary operator
+					 * Checks values of the keys in $where array
+					 * In other words, check if condition_value is a string - needed for correct SQL syntax
+					 *
+					 * @var string $checkSetString String of one SET parameter
+					 */
+					$checkWhereString = is_string( $where[ $keys[$i] ] ) ? '\'' . $where[ $keys[$i] ] . '\'' : $where[ $keys[$i] ];
+					/* Populate array $whereConditions with WHERE conditions */
+					$whereConditions[$i] = $keys[$i] . ' = ' . $checkWhereString;
+				}
+				/**
+				 * $whereString is if shorthand that checks for amount of WHERE conditions,
+				 * if there is more than one then they will be separated by sql's and "AND",
+				 * if there is other condition then no separation will be added
+				 *
+				 * @var string $whereString  String of ALL SET parameters
+				 */
+				$whereString = ( count( $where ) > 1 ?
+					implode( ' AND ' , $whereConditions ) : implode( "" , $whereConditions ) );
 
-                // Parse to add commas
-                if($i != count($rows)-1) {
-                    $update .= ',';
-                }
-            }
-            $update .= ' WHERE '.$where;
-            $query = @mysql_query($update);
-            if($query)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
+				/* Append ALL SET parameter to SQL $update string */
+				$update .= ' WHERE ' . $whereString;
+
+			/* End of Codeblock for handling $where array */
+
+			/* Execute the query within try catch statement and catch errors from PDOstatement into $e variable */
+			try {
+				$stmt = $this->pdo->prepare( $update );
+				$stmt->execute();
+				return true;
+			} catch ( \PDOException $e ) {
+				echo "Something is wrong in update(): " . $e->getMessage();
+				return false;
+			};
+
+		} else {
+			return false;
+		}
+	}
 
     /*
     * Returns the result set

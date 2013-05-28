@@ -1,9 +1,7 @@
-<<<<<<< HEAD
-﻿*.idea/*
+﻿﻿*.idea/*
 *idea/
-*.mwb
 *.mwb.bak
 =======
 .htaccess
 *.log
->>>>>>> ee68172f47797f6c7472d6a450acfe92be41831f
+*.csv
