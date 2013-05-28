@@ -8,7 +8,9 @@
     require_once(CLASSES_PATH . "/database.class.php");
 
 
-	
+	$db = new Cls\Database('localhost', 'security_shop', '987654321', 'shop_user');
+	$db->connect();
+
 	
 	Lib\renderLayoutWithContentFile("home.php");
 

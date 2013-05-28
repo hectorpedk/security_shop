@@ -109,19 +109,19 @@ CREATE INDEX `fk_order_id_idx` ON `security_shop`.`order_items` (`order_id` ASC)
 USE `security_shop` ;
 
 SET SQL_MODE = '';
-GRANT USAGE ON *.* TO shop_admin;
- DROP USER shop_admin;
+GRANT USAGE ON *.* TO shop_admin@localhost;
+ DROP USER shop_admin@localhost;
 SET SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
-CREATE USER 'shop_admin' IDENTIFIED BY '123456789';
+CREATE USER 'shop_admin'@'localhost' IDENTIFIED BY '123456789';
 
-GRANT CREATE, DELETE, SELECT, UPDATE, INSERT, INDEX, ALTER ON TABLE security_shop.* TO 'shop_admin';
+GRANT CREATE, DELETE, SELECT, UPDATE, INSERT, INDEX, ALTER ON TABLE security_shop.* TO 'shop_admin'@'localhost';
 SET SQL_MODE = '';
-GRANT USAGE ON *.* TO shop_user;
- DROP USER shop_user;
+GRANT USAGE ON *.* TO shop_user@localhost;
+ DROP USER shop_user@localhost;
 SET SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
-CREATE USER 'shop_user' IDENTIFIED BY '987654321';
+CREATE USER 'shop_user'@'localhost' IDENTIFIED BY '987654321';
 
-GRANT INSERT, SELECT, UPDATE ON TABLE security_shop.* TO 'shop_user';
+GRANT INSERT, SELECT, UPDATE ON TABLE security_shop.* TO 'shop_user'@'localhost';
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

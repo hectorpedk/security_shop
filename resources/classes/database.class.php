@@ -59,7 +59,7 @@ class Database
 
             } catch ( \PDOException $e ) {
                 # If exception was thrown store into variable $e and echo it out;
-                echo 'ERROR IN CONNECTION: ' . $e->getMessage();
+                echo 'Error with connection in connect(): ' . $e->getMessage();
                 return false;
             }
 
