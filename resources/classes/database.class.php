@@ -163,7 +163,7 @@ class Database
 
                             $this->result[ $i ][ $keys[$x] ] = $rows[ $keys[$x] ];
 
-                        } elseif ( $stmt->rowCount < 1 ) {
+                        } elseif ( $stmt->rowCount() < 1 ) {
 
                             $this->result = null;
 
