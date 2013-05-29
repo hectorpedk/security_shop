@@ -10,12 +10,10 @@
 
 $config = array(
 	"db" => array(
-		"db1" => array(
-			"dbname" => "securityshop",
-			"username" => "securityshop",
-			"password" => "securityshop",
-			"host" => "localhost"
-		),
+		"dbname" => "securityshop",
+		"username" => "securityshop",
+		"password" => "securityshop",
+		"host" => "localhost"
 	),
 	"paths" => array(
 		"resources" => "/resources",
@@ -31,13 +29,16 @@ $config = array(
 	ex. require_once(LIBRARY_PATH . "Paginator.php")
 */
 defined("LIBRARY_PATH")
-	or define("LIBRARY_PATH", realpath(dirname(__FILE__) . '/library'));
+	or define("LIBRARY_PATH", realpath(dirname(__FILE__) . '/library' ));
 	
 defined("TEMPLATES_PATH")
 	or define("TEMPLATES_PATH", realpath(dirname(__FILE__) . '/templates'));
 
 defined("CLASSES_PATH")
         or define("CLASSES_PATH", realpath(dirname(__FILE__) . '/classes'));
+
+defined("CONTAINER_PATH")
+	or define("CONTAINER_PATH", realpath(dirname(__FILE__) . '/container'));
 
 /*
 	Error reporting.
