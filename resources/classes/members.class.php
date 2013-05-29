@@ -17,9 +17,12 @@ class Members {
             $name,
             $lastname,
             $email,
-            $username,
+			$phone,
+            $login,
             $password,
             $salt;
+
+	private $_db;
 
     function __construct( $id = 0 )
     {
@@ -27,21 +30,17 @@ class Members {
     }
 
 
-    /**
-     * @param string $lastname
-     *
-     */
+	public function setName( $name )
+	{
+		$this->name = $name;
+	}
+
     public function setLastname( $lastname )
     {
         $this->lastname = $lastname;
     }
 
-    public function setName( $name )
-    {
-        $this->name = $name;
-    }
-
-    public function setEmail ( $email )
+	public function setEmail ( $email )
     {
         $this->email = $email;
     }

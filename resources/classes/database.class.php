@@ -21,9 +21,6 @@ class Database
     private $db_name;          // Database
     private $db_user;          // Username
     private $db_pass;          // Password
-    /*
-     * End edit
-     */
 
     /**
      * @var PDO pdo Holds PDO object after successful connection to the database;
@@ -163,7 +160,7 @@ class Database
 
                             $this->result[ $i ][ $keys[$x] ] = $rows[ $keys[$x] ];
 
-                        } elseif ( $stmt->rowCount < 1 ) {
+                        } elseif ( $stmt->rowCount() < 1 ) {
 
                             $this->result = null;
 
