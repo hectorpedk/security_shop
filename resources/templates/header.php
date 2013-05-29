@@ -16,3 +16,4 @@
 		<li><a href="#">Portfolio</a></li>
 	</ul>
 </div>
+<hr/>

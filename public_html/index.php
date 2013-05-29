@@ -18,9 +18,12 @@
     // very basic route
     
     if(isset($_GET['review'])){
+        
         Lib\renderLayoutWithContentFile("review.php", array(
-            'id' => $_GET['review']
+            'id' => $_GET['review'],
+            //others vars probably needed here like 'is_logged' => bool
             ));
+        
     }else{
         Lib\renderLayoutWithContentFile("home.php");    
     }

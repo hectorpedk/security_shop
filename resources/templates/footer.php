@@ -1,3 +1,4 @@
+<hr/>
 <div id="footer">
 	Footer content...
 </div>
