@@ -1,3 +1,4 @@
+<hr/>
 <div id="siteControls">
 	<ul class="categories">
 		<li>PHP</li>
