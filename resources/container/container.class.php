@@ -53,7 +53,7 @@
 
 		public static function makeReview (){
 			$review = new Cls\Reviews();
-			$review->setDb( setDb( self::$_database ) );
+			$review->setDb( self::$_database );
 
 			return $review;
 		}
