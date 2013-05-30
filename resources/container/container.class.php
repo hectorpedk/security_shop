@@ -54,13 +54,14 @@
 
 		public static function makeReview (){
 			$review = new Cls\Reviews();
-			$review->setDb( setDb( self::$_database ) );
+			$review->setDb( self::$_database );
 
 			return $review;
 		}
 
 		public static function DB ( array $db_config ) {
 			static::$_database = new Cls\Database( (array) $db_config );
+			return static::$_database;
 		}
 
 		public static function Hashing () {
