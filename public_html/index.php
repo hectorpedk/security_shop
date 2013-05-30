@@ -22,10 +22,23 @@
         if(isset($_GET['page']) && $_GET['page']=='review' && isset($_GET['pid']) && is_numeric($_GET['pid'])){
             
             $db = new Cls\Database( (array) $db_config );
-            $review = $db->select('reviews', '*', 'product_id='.$_GET['pid']);
-            $review = $db->getResult();
+            $reviews = $db->select('reviews', '*', 'product_id='.$_GET['pid']);
+            $reviews = $db->getResult();
+            $db->clearResult();
+            $temp = array();            
             
-            Lib\renderContentFile("review.get.php", array('review' => $review));
+            foreach ($reviews as $review){
+                $db->select('members', '*', 'id='.$review['member_id']);
+                $author = $db->getResult();
+                $review['author_name'] = $author['name'];
+                $review['author_lastname'] = $author['lastname'];
+                $review['author_email'] = $author['email'];
+                array_push($temp, $review);
+            }
+            
+            $reviews = $temp;
+            $temp = null;
+            Lib\renderContentFile("review.get.php", array('review' => $reviews));
             
         }
         

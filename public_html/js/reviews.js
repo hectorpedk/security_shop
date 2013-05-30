@@ -22,7 +22,8 @@ $(window).on('load', function () {
             
             $.each(content, function (index, obj) {
                 Reviews.content += '<li>';
-                Reviews.content += '<strong>' + obj.title + '</strong><br/>';
+                Reviews.content += '<strong>' + obj.title + '</strong> ';
+                Reviews.content += '(Author: <a href="mailto:' + obj.author_email + '">' + obj.author_name + ' ' + obj.author_lastname + '</a>)<br/>';
                 Reviews.content += obj.body;
             });
 

@@ -448,6 +448,11 @@ class Database
     {
         return $this->result;
     }
+    
+    public function clearResult()
+    {
+        $this->result = null;
+    }
 
 	public function getPdo () {
 		return $this->pdo;
