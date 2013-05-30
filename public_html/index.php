@@ -11,7 +11,7 @@
 	$db = Container::DB( $db_config );
 	$member = Container::makeMember();
 
-	var_dump( $member );
+	//var_dump( $member );
 	/* END */
 
     
@@ -21,7 +21,8 @@
         
         if(isset($_GET['page']) && $_GET['page']=='review' && isset($_GET['pid']) && is_numeric($_GET['pid'])){
             
-            $review = $db->select('reviews', '*', 'product='.$_GET['pid']);
+            $db = new Cls\Database( (array) $db_config );
+            $review = $db->select('reviews', '*', 'product_id='.$_GET['pid']);
             $review = $db->getResult();
             
             Lib\renderContentFile("review.get.php", array('review' => $review));
@@ -40,6 +41,7 @@
     // Product page. Test
     if(isset($_GET['page']) && $_GET['page']=='product' && isset($_GET['id']) && is_numeric($_GET['id'])){
         
+        $db = new Cls\Database( (array) $db_config );
         $product = $db->select('products', '*', 'id='.$_GET['id']);
         $product = $db->getResult();
         Lib\renderLayoutWithContentFile('product.php', array('product'=>$product));

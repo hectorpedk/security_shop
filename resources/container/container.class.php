@@ -55,7 +55,7 @@
 			$review = new Cls\Reviews();
 			$review->setDb( setDb( self::$_database ) );
 
-			return $role;
+			return $review;
 		}
 
 		public static function DB ( array $db_config ) {
