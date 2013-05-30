@@ -8,6 +8,7 @@
     require_once CONTAINER_PATH;
 
 	/* Example Code, Dimul */
+
 	/// TODO: doesn't work
 
 
@@ -15,6 +16,7 @@
 //
 //	var_dump( $review );
 //    exit();
+
 	/* END */
 
 	$db = Container::DB( $db_config );
@@ -26,9 +28,22 @@
 
         if(isset($_GET['page']) && $_GET['page']=='review' && isset($_GET['pid']) && is_numeric($_GET['pid'])){
             
+<<<<<<< HEAD
 //            $db = new Cls\Database( (array) $db_config );
 
            	$db->select('reviews', '*', 'product_id='.$_GET['pid']);
+=======
+            if($_SERVER['REQUEST_METHOD'] === 'POST'){
+                
+                $title = $_POST['title'];
+                print_r($_POST);
+                exit();
+            
+            }
+            
+            //$db = new Cls\Database( (array) $db_config );
+            $db->select('reviews', '*', 'product_id='.$_GET['pid']);
+>>>>>>> origin/master
             $reviews = $db->getResult();
 //			$db->clearResult();
             $temp = array();            
@@ -45,12 +60,6 @@
             $reviews = $temp;
             $temp = null;
             Lib\renderContentFile("review.get.php", array('review' => $reviews));
-            
-        }
-        
-        if(isset($_POST['review']) && is_numeric($_POST['id'])){
-            
-            //add review to the db
             
         }
         
