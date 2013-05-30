@@ -9,25 +9,28 @@
 
 	/* Example Code, Dimul */
 	/// TODO: doesn't work
-    $db = Container::DB( $db_config );
 
-	$review = Container::makeReview();
 
-	var_dump( $review );
-    exit();
+//	$review = Container::makeReview();
+//
+//	var_dump( $review );
+//    exit();
 	/* END */
 
-    
-    
-    // Reviews REST service, Motiejus
-    if(isset($_GET['json']) && $_GET['json'] == '1'){
-        
+	$db = Container::DB( $db_config );
+
+
+
+	// Reviews REST service, Motiejus
+	if(isset($_GET['json']) && $_GET['json'] == '1'){
+
         if(isset($_GET['page']) && $_GET['page']=='review' && isset($_GET['pid']) && is_numeric($_GET['pid'])){
             
-            $db = new Cls\Database( (array) $db_config );
-            $reviews = $db->select('reviews', '*', 'product_id='.$_GET['pid']);
+//            $db = new Cls\Database( (array) $db_config );
+
+           	$db->select('reviews', '*', 'product_id='.$_GET['pid']);
             $reviews = $db->getResult();
-            $db->clearResult();
+//			$db->clearResult();
             $temp = array();            
             
             foreach ($reviews as $review){
