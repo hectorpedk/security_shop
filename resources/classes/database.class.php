@@ -158,6 +158,7 @@ class Database
 
         try {
             /** @var PDOStatement $stmt Holds a prepared statement for PDO object to handle */
+//			var_dump( $select );
             $stmt = $this->pdo->prepare( $select );
             $stmt->execute();
 

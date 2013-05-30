@@ -16,9 +16,10 @@
 
 		private static $_database;
 
-		public static function makeMember () {
-			$member = new Cls\Members();
-			$member->setDb( self::$_database );
+		public static function makeMember ( $db_config ) {
+			$member = new Cls\Members(  );
+			$member->setDb( self::DB( $db_config ) );
+			$member->setHashing( self::Hashing() );
 
 			return $member;
 		}
@@ -60,6 +61,10 @@
 
 		public static function DB ( array $db_config ) {
 			static::$_database = new Cls\Database( (array) $db_config );
+		}
+
+		public static function Hashing () {
+			return new Cls\Hashing();
 		}
 
 	}
