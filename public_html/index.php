@@ -8,8 +8,10 @@
     require_once CONTAINER_PATH;
 
 	/* Example Code, Dimul */
-	/* TODO: doesn't work */
+
+	/// TODO: doesn't work
     $db = Container::DB( $db_config );
+
 	$review = Container::makeReview();
 	var_dump( $review );
     exit();
