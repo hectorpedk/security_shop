@@ -14,7 +14,7 @@
 	class Container
 	{
 
-		private static $_database;
+		public static $_database;
 
 		public static function makeMember () {
 			$member = new Cls\Members();
@@ -60,7 +60,7 @@
 
 		public static function DB ( array $db_config ) {
 			static::$_database = new Cls\Database( (array) $db_config );
-			return self::$_database;
+			return static::$_database;
 		}
 
 	}
