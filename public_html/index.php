@@ -27,11 +27,11 @@
 
         if(isset($_GET['page']) && $_GET['page']=='review' && isset($_GET['pid']) && is_numeric($_GET['pid'])){
             
-<<<<<<< HEAD
-//            $db = new Cls\Database( (array) $db_config );
+
+            $db = new Cls\Database( (array) $db_config );
 
            	$db->select('reviews', '*', 'product_id='.$_GET['pid']);
-=======
+
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 
                 $title = $_POST['title'];
@@ -42,9 +42,9 @@
             
             //$db = new Cls\Database( (array) $db_config );
             $db->select('reviews', '*', 'product_id='.$_GET['pid']);
->>>>>>> origin/master
+
             $reviews = $db->getResult();
-//			$db->clearResult();
+    		$db->clearResult();
             $temp = array();            
             
             foreach ($reviews as $review){
