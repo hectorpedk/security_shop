@@ -7,16 +7,6 @@
 	require_once LIBRARY_PATH . '/templateFunctions.php';
     require_once CONTAINER_PATH;
 
-	/* Example Code, Dimul */
-
-	/// TODO: doesn't work
-
-
-//	$review = Container::makeReview();
-//
-//	var_dump( $review );
-//    exit();
-
 
 	$db = Container::DB( $db_config );
 
