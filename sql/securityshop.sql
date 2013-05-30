@@ -55,7 +55,7 @@ CREATE  TABLE IF NOT EXISTS `security_shop`.`orders` (
   `member_id` INT NOT NULL ,
   `datetime` DATETIME NOT NULL ,
   PRIMARY KEY (`order_id`) ,
-  CONSTRAINT `fk_member_id`
+  CONSTRAINT `fk_member_id_orders`
     FOREIGN KEY (`member_id` )
     REFERENCES `security_shop`.`members` (`id` )
     ON DELETE NO ACTION
@@ -95,7 +95,7 @@ CREATE  TABLE IF NOT EXISTS `security_shop`.`order_items` (
     REFERENCES `security_shop`.`orders` (`order_id` )
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
-  CONSTRAINT `fk_product_id`
+  CONSTRAINT `fk_product_id_oitems`
     FOREIGN KEY (`product_id` )
     REFERENCES `security_shop`.`products` (`id` )
     ON DELETE NO ACTION
@@ -105,6 +105,35 @@ ENGINE = InnoDB;
 CREATE INDEX `fk_product_id_idx` ON `security_shop`.`order_items` (`product_id` ASC) ;
 
 CREATE INDEX `fk_order_id_idx` ON `security_shop`.`order_items` (`order_id` ASC) ;
+
+
+-- -----------------------------------------------------
+-- Table `security_shop`.`reviews`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `security_shop`.`reviews` ;
+
+CREATE  TABLE IF NOT EXISTS `security_shop`.`reviews` (
+  `id` INT NULL AUTO_INCREMENT ,
+  `member_id` INT NULL ,
+  `product_id` INT NULL ,
+  `title` VARCHAR(200) NULL ,
+  `body` LONGTEXT NULL ,
+  PRIMARY KEY (`id`) ,
+  CONSTRAINT `fk_member_id_reviews`
+    FOREIGN KEY (`member_id` )
+    REFERENCES `security_shop`.`members` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_product_id_reviews`
+    FOREIGN KEY (`product_id` )
+    REFERENCES `security_shop`.`products` (`id` )
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE INDEX `fk_member_id_idx` ON `security_shop`.`reviews` (`member_id` ASC) ;
+
+CREATE INDEX `fk_product_id_idx` ON `security_shop`.`reviews` (`product_id` ASC) ;
 
 USE `security_shop` ;
 

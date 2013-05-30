@@ -8,44 +8,43 @@
 	you'll only need to update it here.
 */
 
-$config = array(
-	"db" => array(
-		"dbname" => "securityshop",
-		"username" => "securityshop",
-		"password" => "securityshop",
-		"host" => "localhost"
-	),
-	"paths" => array(
-		"resources" => "/resources",
-		"images" => array(
-			"content" => $_SERVER["DOCUMENT_ROOT"] . "/public_html/img",
-			"layout" => $_SERVER["DOCUMENT_ROOT"] . "/public_html/img/layout"
+$db_config = array(
+		"db_host" => "localhost",
+		"db_name" => "security_shop",
+		"db_user" => "shop_admin",
+		"db_pass" => "123456789",
+	);
+$paths = array(
+	"CLASSES" 	=>	"/classes",
+	"DB"		=>	"/classes/database.class.php",
+	"CONTAINER"	=>	"/container/container.class.php",
+	"LIBRARY" 	=>	"/library",
+	"TEMPLATES" =>	"/templates",
+	"IMAGES" => array(
+		"content" => $_SERVER["DOCUMENT_ROOT"] . "/public_html/img",
+		"layout" => $_SERVER["DOCUMENT_ROOT"] . "/public_html/img/layout"
 		)
-	)
-);
+	);
 
 /*
 	Creating constants for heavily used paths makes things a lot easier.
-	ex. require_once(LIBRARY_PATH . "Paginator.php")
+	ex. require_once(LIBRARY_PATH . "/Pagination.php")
 */
-defined("LIBRARY_PATH")
-	or define("LIBRARY_PATH", realpath(dirname(__FILE__) . '/library' ));
-	
-defined("TEMPLATES_PATH")
-	or define("TEMPLATES_PATH", realpath(dirname(__FILE__) . '/templates'));
+	$keys = array_keys( $paths );
+	for( $i = 0 ; $i < count( $paths ) ; $i++){
 
-defined("CLASSES_PATH")
-        or define("CLASSES_PATH", realpath(dirname(__FILE__) . '/classes'));
+		if ( !is_array( $paths[ $keys[$i] ] ) ){
 
-defined("CONTAINER_PATH")
-	or define("CONTAINER_PATH", realpath(dirname(__FILE__) . '/container'));
+			defined( $keys[ $i ] . '_PATH' )
+				or define( $keys[ $i ] . "_PATH", realpath( dirname(__FILE__) . $paths[ $keys[ $i ] ] ) );
 
+		}
+
+	}
 /*
 	Error reporting.
 */
-ini_set("error_reporting", "true");
-error_reporting(E_ALL|E_STRICT);
-
-
+	ini_set("error_reporting", "true");
+	error_reporting(E_ALL|E_STRICT);
 
 ?>

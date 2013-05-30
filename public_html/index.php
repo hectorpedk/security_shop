@@ -3,14 +3,17 @@
     use Resources\Classes as Cls;
 	use Resources\DI\Container;
 
-	require_once(realpath(dirname(__FILE__) . "/../resources/config.php"));
-	require_once(LIBRARY_PATH . "/templateFunctions.php");
-	//require_once(LIBRARY_PATH . "/PasswordHash.php");
-    require_once(CLASSES_PATH . "/database.class.php");
-    require_once( CONTAINER_PATH . "/container.class.php" );
-    
-    $db = new Cls\Database('localhost', 'security_shop', '987654321', 'shop_user');
-	$db->connect();
+	require_once realpath(dirname(__FILE__) . '/../resources/config.php');
+	require_once LIBRARY_PATH . '/templateFunctions.php';
+    require_once CONTAINER_PATH;
+
+	/* Example Code, Dimul */
+	$db = Container::DB( $db_config );
+	$member = Container::makeMember();
+
+	var_dump( $member );
+	/* END */
+
     
     
     // Reviews REST service, Motiejus
@@ -33,7 +36,6 @@
         
         exit();
     }
-    
     
     // Product page. Test
     if(isset($_GET['page']) && $_GET['page']=='product' && isset($_GET['id']) && is_numeric($_GET['id'])){

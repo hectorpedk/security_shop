@@ -11,5 +11,25 @@ namespace Resources\Classes;
 
 
 class Roles {
+	private $id , $name;
+	/** @var  Database $_db */
+	private $_db;
+
+	public function setDb ( $db ) {
+		$this->_db = $db;
+	}
+
+	public function setName ( $name ) {
+		$this->name = $name;
+	}
+
+	public function getId () {
+		return $this->id;
+	}
+
+	public function getName () {
+		return $this->name;
+	}
+
 
 }

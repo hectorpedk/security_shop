@@ -28,13 +28,37 @@ class Database
     private $pdo;              // Checks to see if the connection is active
     private $result = array();
 
-	function __construct ( $db_host , $db_name , $db_pass , $db_user )
+	function __construct ( array $db_config = null)
 	{
-		$this->db_host = $db_host;
-		$this->db_name = $db_name;
-		$this->db_pass = $db_pass;
-		$this->db_user = $db_user;
-	} // Results that are returned from the query
+		if ( is_array( $db_config ) && $db_config != null ) {
+
+			$allowed_variables = get_class_vars(__CLASS__);
+
+			$keys = array_keys( $db_config );
+
+			for ( $i = 0 ; $i < count( $db_config ) ; $i++ ) {
+
+				switch ( $keys[$i] ) {
+
+					case $keys[$i]:
+						$validate = array_key_exists( $keys[$i] , $allowed_variables );
+						if($validate){
+							$this->$keys[$i] = $db_config [ $keys[$i] ];
+							break;
+						}
+					default:
+						echo $keys[$i] . ' from config.php is not a valid parameter ';
+						break;
+				}
+			}
+		} else {
+			return false;
+		}
+
+		self::connect();
+
+	}
+
 
 
     /*
@@ -253,7 +277,7 @@ class Database
 	 *
 	 * @return bool
 	 */
-	// TODO: Finish update with PDO class
+
 	public function del( $table , $where = null )
     {
         if ( $this->tableExists( $table ) ) {
@@ -424,4 +448,8 @@ class Database
     {
         return $this->result;
     }
+
+	public function getPdo () {
+		return $this->pdo;
+	}
 }
