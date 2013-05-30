@@ -26,23 +26,17 @@
 	if(isset($_GET['json']) && $_GET['json'] == '1'){
 
         if(isset($_GET['page']) && $_GET['page']=='review' && isset($_GET['pid']) && is_numeric($_GET['pid'])){
-            
-
-            $db = new Cls\Database( (array) $db_config );
-
-           	$db->select('reviews', '*', 'product_id='.$_GET['pid']);
 
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 
                 $title = $_POST['title'];
+                $body = $_POST['body'];
                 print_r($_POST);
                 exit();
             
             }
-            
-            //$db = new Cls\Database( (array) $db_config );
-            $db->select('reviews', '*', 'product_id='.$_GET['pid']);
 
+            $db->select('reviews', '*', 'product_id='.$_GET['pid']);
             $reviews = $db->getResult();
     		$db->clearResult();
             $temp = array();            
