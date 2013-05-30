@@ -14,7 +14,7 @@
 	class Container
 	{
 
-		public static $_database;
+		private static $_database;
 
 		public static function makeMember () {
 			$member = new Cls\Members();
