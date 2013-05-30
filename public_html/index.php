@@ -29,9 +29,17 @@
 
             if($_SERVER['REQUEST_METHOD'] === 'POST'){
                 
-                $title = $_POST['title'];
-                $body = $_POST['body'];
-                print_r($_POST);
+                $review = array();
+                $review['id'] = 0;
+                $review['member_id'] = "2";
+                $review['product_id'] = $_GET['pid'];
+                $review['title'] = $_POST['title'];
+                $review['body'] = $_POST['body'];
+                
+                $db->insert('reviews', array_values($review));
+                
+                header('Content-Type: application/json');
+                echo json_encode($review);
                 exit();
             
             }
@@ -41,13 +49,23 @@
     		$db->clearResult();
             $temp = array();            
             
-            foreach ($reviews as $review){
+            if(array_keys($reviews) !== range(0, count($reviews) - 1)){
+                $review = $reviews;
                 $db->select('members', '*', 'id='.$review['member_id']);
                 $author = $db->getResult();
                 $review['author_name'] = $author['name'];
                 $review['author_lastname'] = $author['lastname'];
                 $review['author_email'] = $author['email'];
                 array_push($temp, $review);
+            }else{
+                foreach ($reviews as $review){
+                    $db->select('members', '*', 'id='.$review['member_id']);
+                    $author = $db->getResult();
+                    $review['author_name'] = $author['name'];
+                    $review['author_lastname'] = $author['lastname'];
+                    $review['author_email'] = $author['email'];
+                    array_push($temp, $review);
+                }
             }
             
             $reviews = $temp;

@@ -12,7 +12,6 @@ $(window).on('load', function () {
         Reviews.$reviewForm = $('.review__post');
         Reviews.pid = Reviews.$reviews.data('product-id');
         Reviews.url = '?' + $.param({ page: 'review', pid: Reviews.pid, json: 1 });
-        Reviews.content = '<ul>';
 
         Reviews.getReviews = function () {
             var _xhr = $.ajax({
@@ -21,19 +20,23 @@ $(window).on('load', function () {
             });
             _xhr.done(function (content) {
 
+                Reviews.content = '<ul>';
+
                 $.each(content, function (index, obj) {
                     Reviews.content += '<li>';
                     Reviews.content += '<strong>' + obj.title + '</strong> ';
                     Reviews.content += '(Author: <a href="mailto:' + obj.author_email + '">' + obj.author_name + ' ' + obj.author_lastname + '</a>)<br/>';
                     Reviews.content += obj.body;
-                    console.log(obj);
+                    //console.log(obj);
                 });
 
                 Reviews.content += '</ul>';
                 Reviews.$reviewsLayout.html(Reviews.content);
 
             });
-        }();
+        };
+
+        Reviews.getReviews();
 
         Reviews.postReview = function (title, body) {
             var _xhr = $.ajax({
@@ -45,14 +48,17 @@ $(window).on('load', function () {
                 }
             });
             _xhr.done(function (content) {
-                console.log(content);
+                if(content.product_id == Reviews.pid && content.title == title && content.body == body){
+                    Reviews.getReviews();
+                    Reviews.$reviewForm[0].reset();
+                }
             });
         };
 
         Reviews.$reviewForm.on('submit', function (e) {
             e.preventDefault();
-            var _title = $reviewForm.find('#review_title').val();
-            var _body = $reviewForm.find('#review_body').val();
+            var _title = Reviews.$reviewForm.find('#review_title').val();
+            var _body = Reviews.$reviewForm.find('#review_body').val();
             Reviews.postReview(_title, _body);
         });
 

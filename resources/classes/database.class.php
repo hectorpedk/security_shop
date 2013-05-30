@@ -216,7 +216,7 @@ class Database
      * Optional: columns    (if values don't match the number of rows)
      *
      * @param string    $table      Table name to insert into						| required parameter
-     * @param array     $values     Array of values to insert into table			| required patameter
+     * @param array     $values     indexed Array of values to insert into table			| required patameter
      * @param array     $columns    Array of columns into which to insert values	| default null
      *
      * @return bool|PDOException
