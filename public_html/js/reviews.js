@@ -51,6 +51,9 @@ $(window).on('load', function () {
 
         Reviews.$reviewForm.on('submit', function (e) {
             e.preventDefault();
+            var _title = $reviewForm.find('#review_title').val();
+            var _body = $reviewForm.find('#review_body').val();
+            Reviews.postReview(_title, _body);
         });
 
     }

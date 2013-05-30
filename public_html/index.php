@@ -12,9 +12,9 @@
 	/// TODO: doesn't work
     $db = Container::DB( $db_config );
 
-	$review = Container::makeReview();
-	var_dump( $review );
-    exit();
+	//$review = Container::makeReview();
+	//var_dump( $review );
+    //exit();
 	/* END */
 
     
