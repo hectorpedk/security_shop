@@ -14,8 +14,12 @@ class Reviews {
 	private $id, $member_id, $product_id, $title, $body;
 	/** @var  Database $_db */
 	private $_db;
+    
+    function __construct ( $id = 0 ){
 
-	public function setDb ( $db ) {
+    }
+    
+	public function setDb ( Database $db ) {
 		$this->_db = $db;
 	}
 

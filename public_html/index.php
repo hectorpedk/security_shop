@@ -8,10 +8,13 @@
     require_once CONTAINER_PATH;
 
 	/* Example Code, Dimul */
-	$db = Container::DB( $db_config );
-	$member = Container::makeMember();
+	/* TODO: doesn't work
+    $db = Container::DB( $db_config );
+	$review = Container::makeReview();
 
-	//var_dump( $member );
+	var_dump( $review );
+    exit();
+     * */
 	/* END */
 
     
