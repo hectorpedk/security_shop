@@ -9,6 +9,7 @@
 	namespace Resources\DI;
 
 	use Resources\Classes as Cls;
+	use Resources\Library as Lib;
 
 
 	class Container
@@ -17,9 +18,20 @@
 		private static $_database;
 
 		public static function makeMember ( $db_config ) {
-			$member = new Cls\Members(  );
+
+			$member = new Cls\Members();
 			$member->setDb( self::DB( $db_config ) );
 			$member->setHashing( self::Hashing() );
+			$member->setCRUD( self::CRUD( $db_config ) );
+
+			return $member;
+		}
+
+		public static function makeMemberLogin ( $member_id , $db_config ) {
+			$member = new Cls\Members( $member_id , self::CRUD( $db_config ) );
+			$member->setDb( self::DB( $db_config ) );
+			$member->setHashing( self::Hashing() );
+			$member->setCRUD( self::CRUD( $db_config ) );
 
 			return $member;
 		}
@@ -32,7 +44,7 @@
 		}
 
 		public static function makeOrder () {
-			$order = new Cls\Order_items();
+			$order = new Cls\Orders();
 			$order->setDb( self::$_database );
 
 			return $order;
@@ -40,14 +52,14 @@
 
 		public static function makeProduct () {
 			$product = new Cls\Products();
-			$product->setDb( setDb( self::$_database ) );
+			$product->setDb( self::$_database );
 
 			return $product;
 		}
 
 		public static function makeRole () {
 			$role = new Cls\Roles();
-			$role->setDb( setDb( self::$_database ) );
+			$role->setDb( self::$_database );
 
 			return $role;
 		}
@@ -60,18 +72,30 @@
 		}
 
 		public static function DB ( array $db_config ) {
-			static::$_database = new Cls\Database( (array) $db_config );
+			static::$_database = Cls\Database::getInstance( $db_config );
+
 			return static::$_database;
 		}
 
+		private static function CRUD ( array $db_config ) {
+			$crud =  new Lib\CRUD();
+			$crud->setPdo( self::DB( $db_config ) );
+			return $crud;
+		}
+
 		public static function Hashing () {
-			return new Cls\Hashing();
+			return new Lib\Hashing();
 		}
 
 	}
 
 	spl_autoload_register( function ( $class ) {
-		require_once realpath( dirname( __FILE__ ) . '/../classes/' . strtolower( basename( $class ) ) . '.class.php' );
+
+		$cls = realpath( dirname( __FILE__ ) . '/../classes/' . strtolower( basename( $class ) ) . '.class.php' );
+		$lib =  realpath( dirname( __FILE__ ) . '/../library/' . strtolower( basename( $class ) ) . '.php' );
+
+		require_once $cls ? $cls : $lib;
+
 	} );
 
 

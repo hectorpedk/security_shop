@@ -20,6 +20,7 @@ $paths = array(
 	"CONTAINER"	=>	"/container/container.class.php",
 	"LIBRARY" 	=>	"/library",
 	"TEMPLATES" =>	"/templates",
+	"CONTENTS"	=>	"/content",
 	"IMAGES" => array(
 		"content" => $_SERVER["DOCUMENT_ROOT"] . "/public_html/img",
 		"layout" => $_SERVER["DOCUMENT_ROOT"] . "/public_html/img/layout"

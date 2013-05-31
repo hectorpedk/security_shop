@@ -9,6 +9,8 @@
 
 	namespace Resources\Classes;
 
+	use Resources\Library as Lib;
+
 	class Members
 	{
 		/* Variables correspond to column names in database */
@@ -17,29 +19,62 @@
 
 		/* Dependencies below are injected through container.class.php */
 
-		/** @var  Database $_db */
+		/** @var \PDO $_db */
 		private $_db;
+
+		/** @var Lib\CRUD $_db */
+		private $_crud;
 
 		/** @var  Hashing $_hashing */
 		private $_hashing;
 
+		function __construct ( $id = 0 , Lib\CRUD $crud = null) {
+
+			if( $id > 0 ) {
+				if ( $crud instanceof Lib\CRUD ){
+
+					$where = 'id = \'' . $id . '\'';
+					$columns = ' id , role_id , name , lastname, email, phone, login , password , salt';
+					$crud->select( 'members' , $columns, $where );
+
+					$row = $crud->getResult();
+					$crud->clearResult();
+
+					$this->id			= $row[ 'id' ];
+					$this->role_id		= $row[ 'role_id' ];
+					$this->name 		= $row[ 'name' ];
+					$this->lastname 	= $row[ 'lastname' ];
+					$this->email 		= $row[ 'email' ];
+					$this->phone 		= $row[ 'phone' ];
+					$this->login 		= $row[ 'login' ];
+					$this->password 	= $row[ 'password' ];
+					$this->salt 		= $row[ 'salt' ];
+
+					$this->_crud		= $crud;
+				}
+			}
+
+
+
+		}
+
 		/* End dependencies */
 
 
-		function __construct ( $id = 0 )
-		{
 
-		}
 
 		# SETTERS
 
 		/* Dependencies setters */
-		public function setDb ( Database $db )
-		{
+		public function setDb ( \PDO $db ){
 			$this->_db = $db;
 		}
 
-		public function setHashing ( Hashing $hashing_class){
+		public function setCRUD ( Lib\CRUD $db ) {
+			$this->_crud = $db;
+		}
+
+		public function setHashing ( Lib\Hashing $hashing_class){
 			$this->_hashing = $hashing_class;
 		}
 
@@ -133,10 +168,10 @@
 
 				$where = 'login = \'' . $username . '\'';
 				$columns = ' id , role_id , name , lastname, email, phone, login , password , salt';
-				$this->_db->select( 'members' , $columns, $where );
+				$this->_crud->select( 'members' , $columns, $where );
 
-				$row = $this->_db->getResult();
-				$this->_db->clearResult();
+				$row = $this->_crud->getResult();
+				$this->_crud->clearResult();
 
 				if ( $row !== null ){
 
@@ -174,11 +209,11 @@
 
 			$where = 'login = \'' . $username . '\'';
 			$columns = 'login ';
-			$this->_db->select( 'members' , $columns, $where );
-			$this->_db->getResult();
+			$this->_crud->select( 'members' , $columns, $where );
+			$this->_crud->getResult();
 
-			$result = $this->_db->getResult();
-			$this->_db->clearResult();
+			$result = $this->_crud->getResult();
+			$this->_crud->clearResult();
 			return ( $result ? true : false );
 
 		}

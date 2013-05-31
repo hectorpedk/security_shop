@@ -5,7 +5,8 @@
 	require_once(realpath(dirname(__FILE__) . "/../config.php"));
 	function renderLayoutWithContentFile($contentFile, $variables = array())
 	{
-		$contentFileFullPath = TEMPLATES_PATH . "/" . $contentFile;
+		$contentFileFullPath = CONTENTS_PATH . "/" . $contentFile;
+		var_dump( $contentFileFullPath );
 
 		// making sure passed in variables are in scope of the template
 		// each key in the $variables array will become a variable
@@ -35,7 +36,7 @@
 		// close content div
 		echo "\t</div>\n";
 
-		require_once(TEMPLATES_PATH . "/rightPanel.php");
+//		require_once(TEMPLATES_PATH . "/rightPanel.php");
 
 		// close container div
 		echo "</div>\n";

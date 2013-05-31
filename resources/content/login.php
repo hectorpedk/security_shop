@@ -1,5 +1,3 @@
-<!-- Homepage content -->
-
 <div>
 	<!-- START login -->
 	<div class="login">

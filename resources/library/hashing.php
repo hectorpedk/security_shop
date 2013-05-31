@@ -6,7 +6,7 @@
 	 * www: https://defuse.ca/php-pbkdf2.htm
 	 */
 
-	namespace Resources\Classes;
+	namespace Resources\Library;
 	// These constants may be changed without breaking existing hashes.
 	define("PBKDF2_HASH_ALGORITHM", "sha256");
 	define("PBKDF2_ITERATIONS", 1000);
