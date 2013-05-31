@@ -7,10 +7,21 @@
 	require_once LIBRARY_PATH . '/templateFunctions.php';
     require_once CONTAINER_PATH;
 
+	if ( isset( $_POST[ 'username' ] ) ) {
+		$member = Container::makeMember( $db_config );
+		if ( $member->login( $_POST[ 'username' ] , $_POST[ 'password' ] ) ) {
+			session_start();
+			$_SESSION[ 'user_id' ] = $member->getId();
+			var_dump( $member );
+		}
+	} else {
+		$error = "User does not exist!";
+	}
+
+
+
+
 	$db = Container::DB( $db_config );
-
-
-
 	// Reviews REST service, Motiejus
 	if(isset($_GET['json']) && $_GET['json'] == '1'){
 
