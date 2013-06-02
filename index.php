@@ -7,6 +7,6 @@
 	}
 	$uri .= $_SERVER['HTTP_HOST'];
 	header('Location: '. $uri . '/' . basename(__DIR__) .'/public_html/');
-	exit;
+	exit();
 
 ?>
