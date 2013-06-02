@@ -16,8 +16,7 @@
             $member = Container::makeMember( $db_config );
             if ( $member->login( $username , $password ) ) {
                 session_start();
-                $_SESSION[ 'user_id' ] = $member->getId();
-                print_r($member);
+                $_SESSION[ 'username' ] = $member->getLogin();
             }else{
                 echo "User with credentials provided does not exist!";    
             }
@@ -94,7 +93,17 @@
         
     }
     
-    Lib\renderLayoutWithContentFile("home.php");
-
+    if($user = Container::auth($db_config)){
+        Lib\renderLayoutWithContentFile("home.php", array("user"=>$user));
+    }else{
+        Lib\renderLayoutWithContentFile("home.php", array("user"=>null));
+    }
+    
+    
+    if(isset($_GET['logout']) && $_GET['logout'] == 'true'){
+        session_unset();
+        session_destroy();
+        header( 'Location: /' ) ;
+    }    
 
 ?>

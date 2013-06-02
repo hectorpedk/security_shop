@@ -170,7 +170,7 @@
 
 		}
 
-		private function validateUser ( $username ) {
+		public function validateUser ( $username ) {
 
 			$where = 'login = \'' . $username . '\'';
 			$columns = 'login ';
@@ -180,6 +180,17 @@
 			$result = $this->_db->getResult();
 			$this->_db->clearResult();
 			return ( $result ? true : false );
+
+		}
+        
+        public function authUser ( $username ) {
+
+			$where = 'login = \'' . $username . '\'';
+			$this->_db->select( 'members' , 'id, role_id, name, lastname, email, phone, login', $where );
+			$this->_db->getResult();
+			$result = $this->_db->getResult();
+			$this->_db->clearResult();
+			return ( $result ? $result : false );
 
 		}
 

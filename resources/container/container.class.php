@@ -23,6 +23,24 @@
 
 			return $member;
 		}
+        
+        public static function auth($db_config){
+            
+            $user;
+            if(session_status() != 2) {
+                session_start();
+            }
+            if(isset($_SESSION[ 'username' ])){
+                $user = new Cls\Members(  );
+                $user->setDb( self::DB( $db_config ) );
+                $user->setHashing( self::Hashing() );
+                $user = $user->authUser($_SESSION[ 'username' ]);
+            }else{
+                $user = null;
+            }
+            return $user;
+            
+        }
 
 		public static function makeOrderItem () {
 			$order_items = new Cls\Order_items();

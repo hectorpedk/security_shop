@@ -1,5 +1,5 @@
 <!-- Homepage content -->
-
+<?php if(!is_array($user)): ?>
 <div>
 	<!-- START login -->
 	<div class="login">
@@ -13,3 +13,9 @@
 	</div>
 	<!-- END login -->
 </div>
+<?php else: ?>
+<div>
+    <p>Hey, <?php echo $user['name'] . ' ' . $user['lastname'] ?>!</p>
+    <a href="/?logout=true">Logout</a>
+</div>
+<?php endif; ?>
