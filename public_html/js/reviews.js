@@ -53,6 +53,14 @@ $(window).on('load', function () {
                     Reviews.$reviewForm[0].reset();
                 }
             });
+            _xhr.fail(function (request) {
+                if (request.status == 400) {
+                    alert('Review must have a title and a body');
+                }
+                if (request.status == 401) {
+                    alert('Guest users are not allowed to post reviews. Please login');
+                }
+            });
         };
 
         Reviews.$reviewForm.on('submit', function (e) {

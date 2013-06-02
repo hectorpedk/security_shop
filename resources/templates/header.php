@@ -13,8 +13,8 @@
 <div id="header">
 	<h1>Simple Site</h1>
 	<ul class="nav global">
-		<li><a href="#">Home</a></li>
-		<li><a href="/index.php?page=product&id=1">Product 1</a></li>
+		<li><a href="/">Home</a></li>
+		<li><a href="/?page=products">Products</a></li>
 	</ul>
 </div>
 <hr/>

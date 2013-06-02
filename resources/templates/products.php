@@ -1,9 +1,20 @@
-<!-- Homepage content -->
+<h2>Products int the store</h2>
+
+<div class="products">
+    <ul>
+    <?php foreach($products as $product): ?>
+    <li>
+        <a href="<?php echo "/?page=product&id=" . $product['id']; ?>"><?php echo $product['name']; ?></a>
+    </li>
+    <?php endforeach; ?>
+    </ul>
+</div>
+
 <?php if(!is_array($user)): ?>
 <div style="background:#eee; padding:10px;">
 	<!-- START login -->
 	<div class="login">
-		<form action="index.php" method="post" >
+		<form action="/" method="post" >
 			<h2>Guest</h2>
 			<input type="text"  placeholder="Email address" name="username" value="davand">
 			<input type="password" placeholder="Password" name="password" value="0000">
