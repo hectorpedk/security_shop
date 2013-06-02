@@ -6,20 +6,26 @@
 	require_once realpath(dirname(__FILE__) . '/../resources/config.php');
 	require_once LIBRARY_PATH . '/templateFunctions.php';
     require_once CONTAINER_PATH;
-
-	if ( isset( $_POST[ 'username' ] ) ) {
-		$member = Container::makeMember( $db_config );
-		if ( $member->login( $_POST[ 'username' ] , $_POST[ 'password' ] ) ) {
-			session_start();
-			$_SESSION[ 'user_id' ] = $member->getId();
-			var_dump( $member );
-		}
-	} else {
-		$error = "User does not exist!";
-	}
-
-
-
+    
+    if(isset( $_POST[ 'login_form' ] )){
+        
+        $username = (isset( $_POST[ 'username' ] ) && !empty($_POST[ 'username' ])) ? strip_tags($_POST[ 'username' ]) : null;
+        $password = (isset( $_POST[ 'password' ] ) && !empty($_POST[ 'password' ])) ? strip_tags($_POST[ 'password' ]) : null;
+        
+        if ( filter_var($username, FILTER_SANITIZE_STRING) && filter_var($password, FILTER_SANITIZE_STRING) ) {
+            $member = Container::makeMember( $db_config );
+            if ( $member->login( $username , $password ) ) {
+                session_start();
+                $_SESSION[ 'user_id' ] = $member->getId();
+                print_r($member);
+            }else{
+                echo "User with credentials provided does not exist!";    
+            }
+        } else {
+            echo "Please provide username and password.";
+        }
+        
+    }
 
 	$db = Container::DB( $db_config );
 	// Reviews REST service, Motiejus
